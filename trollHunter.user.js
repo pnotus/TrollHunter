@@ -49,7 +49,7 @@ var user_add_icon =
 
 slayTrolls();
 
-$("div.divCommentsFooter p.right").append("<span class='commentTrollButton'><img src=" + user_delete_icon + " width='16' height='16' alt='Slay troll' class='slayToll' /></span>");
+$("div.divCommentsFooter p.right").append(getImg(user_delete_icon, '16', '16', 'Slay troll', 'slayToll'));
 
 $("span.commentAuthor").click(function(){
     tagAsTroll($(this).text());
@@ -68,9 +68,9 @@ function slayTrolls(){
 		
         if (commenterIsTroll(name)) {
 			$(this).find("div.divCommentsContentHeaderTop p.left").text("(Trollet \'" + name + "\' är infångat av Troll Hunter)");
- 			$(this).find("div.divCommentsContentHeaderTop p.right span").append("<img src=" + user_add_icon + " width='16' height='16' alt='Resurrect troll' class='resurrectTroll' />");
+ 			$(this).find("div.divCommentsContentHeaderTop p.right span").append(getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll'));
 			$(this).find("div.divCommentsContentHeader p.left").text("(Trollet \'" + name + "\' är infångat av Troll Hunter)");
-			$(this).find("div.divCommentsContentHeader p.right span").append("<img src=" + user_add_icon + " width='16' height='16' alt='Resurrect troll' class='resurrectTroll' />");
+			$(this).find("div.divCommentsContentHeader p.right span").append(getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll'));
             $(this).find("div.divCommentsContent").slideUp();
 			$(this).find("div.divCommentsFooter").slideUp();
         }
@@ -101,66 +101,6 @@ function getNameFromForm(form)
 	}
 }
 
-/* A global variable - getImgInPositionedDivHtml - is declared and
-   assigned the value of an inner function expression returned from
-   a one-time call to an outer function expression.
-
-   That inner function returns a string of HTML that represents an
-   absolutely positioned DIV wrapped round an IMG element, such that
-   all of the variable attribute values are provided as parameters
-   to the function call:-
-*/
-var getImgInPositionedDivHtml = (function(){
-    /* The - buffAr - Array is assigned to a local variable of the
-       outer function expression. It is only created once and that one
-       instance of the array is available to the inner function so that
-       it can be used on each execution of that inner function.
-
-       Empty strings are used as placeholders for the date that is to
-       be inserted into the Array by the inner function:-
-    */
-    var buffAr = [
-        '<div id="',
-        '',   //index 1, DIV ID attribute
-        '" style="position:absolute;top:',
-        '',   //index 3, DIV top position
-        'px;left:',
-        '',   //index 5, DIV left position
-        'px;width:',
-        '',   //index 7, DIV width
-        'px;height:',
-        '',   //index 9, DIV height
-        'px;overflow:hidden;\"><img src=\"',
-        '',   //index 11, IMG URL
-        '\" width=\"',
-        '',   //index 13, IMG width
-        '\" height=\"',
-        '',   //index 15, IMG height
-        '\" alt=\"',
-        '',   //index 17, IMG alt text
-        '\"><\/div>'
-    ];
-    /* Return the inner function object that is the result of the
-       evaluation of a function expression. It is this inner function
-       object that will be executed on each call to -
-       getImgInPositionedDivHtml( ... ) -:-
-    */
-    return (function(url, id, width, height, top, left, altText){
-        /* Assign the various parameters to the corresponding
-           locations in the buffer array:-
-        */
-        buffAr[1] = id;
-        buffAr[3] = top;
-        buffAr[5] = left;
-        buffAr[13] = (buffAr[7] = width);
-        buffAr[15] = (buffAr[9] = height);
-        buffAr[11] = url;
-        buffAr[17] = altText;
-        /* Return the string created by joining each element in the
-           array using an empty string (which is the same as just
-           joining the elements together):-
-        */
-        return buffAr.join('');
-    }); //:End of inner function expression.
-})();
-/*^^- :The inline execution of the outer function expression. */
+function getImg(src, width, height, altText, classname){
+	return '<img src=\"' + src + '\" \" width=\"'+ width + '\" height=\"' + height + '\" alt=\"' + altText + '\" class=\"' + classname + '\">';
+};

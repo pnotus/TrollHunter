@@ -1,0 +1,1 @@
+xcopy trollHunter.user.js C:\Users\Pontus\AppData\Roaming\Mozilla\Firefox\Profiles\03af9mfy.default\gm_scripts\troll_hunter\troll_hunter.user.js /Y

@@ -47,32 +47,35 @@ var user_add_icon =
 	"+8V5hmOXjjA8uf+xFyCAGInNzsAA6wBSWUDMC8TA0GGYdmLKswqAAAMAnFQdkhuzRSAAAAAASU" + 
 	"VORK5CYII%3D";
 
-slayTrolls();
+function slayTroll(form)
+{
+	var headerTop = $(form).find("div.divCommentsContentHeaderTop p.left");
+	var headerTopSpan = $(form).find("div.divCommentsContentHeaderTop p.right span");
+	var header = $(form).find("div.divCommentsContentHeader p.left");
+	var headerSpan = $(form).find("div.divCommentsContentHeader p.right span");
+	var commentContent = $(form).find("div.divCommentsContent");
+	var commentFooter = $(form).find("div.divCommentsFooter");
+	
+	headerTop.text("(Trollet \'" + getNameFromForm(form) + "\' är infångat av Troll Hunter)");
+	headerTopSpan.append(getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll'));
+	header.text("(Trollet \'" + getNameFromForm(form) + "\' är infångat av Troll Hunter)");
+	headerSpan.append(getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll'));
+	commentContent.slideUp();
+	commentFooter.slideUp();
+}
 
-$("div.divCommentsFooter p.right").append(getImg(user_delete_icon, '16', '16', 'Slay troll', 'slayToll'));
-
-$("span.commentAuthor").click(function(){
-    tagAsTroll($(this).text());
-    slayTrolls();
-})
-
-// TODO: Borde använda "live" isf "click"?
-$("img.slayToll").click(function(){
-	tagAsTroll($(this).parents("div.divCommentsFooter").find("span.commentAuthor").text());
-	slayTrolls();
-})
+function resurrectTroll(form)
+{
+	$(form).find("div.divCommentsContent").slideDown();
+	$(form).find("div.divCommentsFooter").slideDown();
+}
 
 function slayTrolls(){
     $("form").each(function(){
 		var name = getNameFromForm($(this));
 		
         if (commenterIsTroll(name)) {
-			$(this).find("div.divCommentsContentHeaderTop p.left").text("(Trollet \'" + name + "\' är infångat av Troll Hunter)");
- 			$(this).find("div.divCommentsContentHeaderTop p.right span").append(getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll'));
-			$(this).find("div.divCommentsContentHeader p.left").text("(Trollet \'" + name + "\' är infångat av Troll Hunter)");
-			$(this).find("div.divCommentsContentHeader p.right span").append(getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll'));
-            $(this).find("div.divCommentsContent").slideUp();
-			$(this).find("div.divCommentsFooter").slideUp();
+			slayTroll($(this));
         }
     });
 }
@@ -82,15 +85,32 @@ function findTrolls(){
 }
 
 function tagAsTroll(name){
-    GM_setValue(trollId, GM_getValue(trollId, "") + name + ";");
+	if (!commenterIsTroll(name)) {
+		GM_setValue(trollId, GM_getValue(trollId, "") + name + ";");
+	}
+}
+
+function unTagAsTroll(name) {
+	var trolls = findTrolls();
+	
+	trolls = $.grep(trolls, function(value){
+		return value != name && value != "";
+	})
+	
+	var semiColonSeperatedString = "";
+	
+	$.each(trolls, function(index, value){
+		semiColonSeperatedString += (value + ";");
+	})
+	
+	GM_setValue(trollId, semiColonSeperatedString);
 }
 
 function commenterIsTroll(name){
     return ($.inArray(name, findTrolls()) > -1);
 }
 
-function getNameFromForm(form)
-{
+function getNameFromForm(form){
 	var name = form.find("span.commentAuthor").text();
 
 	if (name.length > 0) {
@@ -104,3 +124,17 @@ function getNameFromForm(form)
 function getImg(src, width, height, altText, classname){
 	return '<img src=\"' + src + '\" \" width=\"'+ width + '\" height=\"' + height + '\" alt=\"' + altText + '\" class=\"' + classname + '\">';
 };
+
+slayTrolls();
+
+$("div.divCommentsFooter p.right").append(getImg(user_delete_icon, '16', '16', 'Slay troll', 'slayToll'));
+
+$("img.slayToll").live("click", function(){
+	tagAsTroll($(this).parents("div.divCommentsFooter").find("span.commentAuthor").text());
+	slayTroll($(this).parents("form.commentContainer"));
+})
+
+$("img.resurrectTroll").live("click", function(){
+	unTagAsTroll($(this).parents("form.commentContainer").find("span.commentAuthor").text());
+	resurrectTroll($(this).parents("form.commentContainer"));
+})

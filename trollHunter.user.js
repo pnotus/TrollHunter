@@ -55,17 +55,24 @@ function slayTroll(form)
 	var headerSpan = $(form).find("div.divCommentsContentHeader p.right span");
 	var commentContent = $(form).find("div.divCommentsContent");
 	var commentFooter = $(form).find("div.divCommentsFooter");
+	var resurrectImage = getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll');
+	var newHeaderText = "(Trollet \'" + getNameFromForm(form) + "\' är infångat av Troll Hunter)";
 	
-	headerTop.text("(Trollet \'" + getNameFromForm(form) + "\' är infångat av Troll Hunter)");
-	headerTopSpan.append(getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll'));
-	header.text("(Trollet \'" + getNameFromForm(form) + "\' är infångat av Troll Hunter)");
-	headerSpan.append(getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll'));
+	headerTop.text(newHeaderText);
+	headerTopSpan.append(resurrectImage);
+	
+	header.text(newHeaderText);
+	headerSpan.append(resurrectImage);
+	
 	commentContent.slideUp();
 	commentFooter.slideUp();
 }
 
 function resurrectTroll(form)
 {
+	var headerTopSpan = $(form).find("img.resurrectTroll").remove();
+	var headerSpan = $(form).find("img.resurrectTroll").remove();
+	
 	$(form).find("div.divCommentsContent").slideDown();
 	$(form).find("div.divCommentsFooter").slideDown();
 }

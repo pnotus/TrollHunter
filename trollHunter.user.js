@@ -49,30 +49,48 @@ var user_add_icon =
 
 function slayTroll(form)
 {
-	var headerTop = $(form).find("div.divCommentsContentHeaderTop p.left");
-	var headerTopSpan = $(form).find("div.divCommentsContentHeaderTop p.right span");
-	var header = $(form).find("div.divCommentsContentHeader p.left");
-	var headerSpan = $(form).find("div.divCommentsContentHeader p.right span");
-	var commentContent = $(form).find("div.divCommentsContent");
-	var commentFooter = $(form).find("div.divCommentsFooter");
-	var resurrectImage = getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll');
-	var newHeaderText = "(Trollet \'" + getNameFromForm(form) + "\' är infångat av Troll Hunter)";
+	if ($(form).find("div.divCommentsContentHeaderTop").length)	{
+		var header = "div.divCommentsContentHeaderTop";
+		var headerLeftP = "div.divCommentsContentHeaderTop p.left";
+		var headerSpan = "div.divCommentsContentHeaderTop p.right span";
+	}
+	else {
+		var header = "div.divCommentsContentHeader";
+		var headerLeftP = "div.divCommentsContentHeader p.left";
+		var headerSpan = "div.divCommentsContentHeader p.right span";
+	}
 	
-	headerTop.text(newHeaderText);
-	headerTopSpan.append(resurrectImage);
+	var headerLeftPClone = $(form).find(headerLeftP).clone();
+	headerLeftPClone.hide();
+	headerLeftPClone.toggleClass("clone");
+	headerLeftPClone.removeClass("left");
+	$(form).find(header).append(headerLeftPClone);
 	
-	header.text(newHeaderText);
-	headerSpan.append(resurrectImage);
+	$(form).find(headerLeftP).text("(Trollet \'" + getNameFromForm(form) + "\' är infångat av Troll Hunter)");
+	$(form).find(headerSpan).append(getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll'));
 	
-	commentContent.slideUp();
-	commentFooter.slideUp();
+	$(form).find("div.divCommentsContent").hide();
+	$(form).find("div.divCommentsFooter").hide();
 }
 
 function resurrectTroll(form)
 {
-	var headerTopSpan = $(form).find("img.resurrectTroll").remove();
-	var headerSpan = $(form).find("img.resurrectTroll").remove();
+	if ($(form).find("div.divCommentsContentHeaderTop").length) {
+		var header = "div.divCommentsContentHeaderTop p.left";
+		var headerOriginal = "div.divCommentsContentHeaderTop p.clone";
+	}
+	else {
+		var header = "div.divCommentsContentHeader p.left";
+		var headerOriginal = "div.divCommentsContentHeader p.clone";
+	}
+	$(form).find(header).remove();
+
+	var headerClone = $(form).find(headerOriginal);
+	headerClone.removeClass("clone");
+	headerClone.toggleClass("left");
+	headerClone.show();
 	
+	$(form).find("img.resurrectTroll").remove();
 	$(form).find("div.divCommentsContent").slideDown();
 	$(form).find("div.divCommentsFooter").slideDown();
 }

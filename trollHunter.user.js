@@ -4,7 +4,8 @@
 // @include				http://idg.se/*
 // @include				http://*.idg.se/*
 // @include				http://localhost/TrollHunter/*
-// @require				http://code.jquery.com/jquery-latest.min.js
+// @require				http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js
+// @require				http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js
 // ==/UserScript==
 
 var trollId = "trolls";
@@ -47,27 +48,20 @@ var user_add_icon =
 	"+8V5hmOXjjA8uf+xFyCAGInNzsAA6wBSWUDMC8TA0GGYdmLKswqAAAMAnFQdkhuzRSAAAAAASU" + 
 	"VORK5CYII%3D";
 
+function toggleTroll(form)
+{
+	$(form).find(".originalHeader").toggle();
+	$(form).find(".trollHeader").toggle();
+	$(form).find(".trollHeader").toggleClass("left");
+
+	$(form).find("img.resurrectTroll").toggle();
+	$(form).find("img.slayToll").toggle();
+
+}
+
 function slayTroll(form)
 {
-	if ($(form).find("div.divCommentsContentHeaderTop").length)	{
-		var header = "div.divCommentsContentHeaderTop";
-		var headerLeftP = "div.divCommentsContentHeaderTop p.left";
-		var headerSpan = "div.divCommentsContentHeaderTop p.right span";
-	}
-	else {
-		var header = "div.divCommentsContentHeader";
-		var headerLeftP = "div.divCommentsContentHeader p.left";
-		var headerSpan = "div.divCommentsContentHeader p.right span";
-	}
-	
-	var headerLeftPClone = $(form).find(headerLeftP).clone();
-	headerLeftPClone.hide();
-	headerLeftPClone.toggleClass("clone");
-	headerLeftPClone.removeClass("left");
-	$(form).find(header).append(headerLeftPClone);
-	
-	$(form).find(headerLeftP).text("(Trollet \'" + getNameFromForm(form) + "\' är infångat av Troll Hunter)");
-	$(form).find(headerSpan).append(getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll'));
+	toggleTroll(form);
 	
 	$(form).find("div.divCommentsContent").hide();
 	$(form).find("div.divCommentsFooter").hide();
@@ -75,28 +69,14 @@ function slayTroll(form)
 
 function resurrectTroll(form)
 {
-	if ($(form).find("div.divCommentsContentHeaderTop").length) {
-		var header = "div.divCommentsContentHeaderTop p.left";
-		var headerOriginal = "div.divCommentsContentHeaderTop p.clone";
-	}
-	else {
-		var header = "div.divCommentsContentHeader p.left";
-		var headerOriginal = "div.divCommentsContentHeader p.clone";
-	}
-	$(form).find(header).remove();
-
-	var headerClone = $(form).find(headerOriginal);
-	headerClone.removeClass("clone");
-	headerClone.toggleClass("left");
-	headerClone.show();
-	
-	$(form).find("img.resurrectTroll").remove();
+	toggleTroll(form);
+		
 	$(form).find("div.divCommentsContent").slideDown();
 	$(form).find("div.divCommentsFooter").slideDown();
 }
 
 function slayTrolls(){
-    $("form").each(function(){
+    $("form.commentContainer").each(function(){
 		var name = getNameFromForm($(this));
 		
         if (commenterIsTroll(name)) {
@@ -150,16 +130,28 @@ function getImg(src, width, height, altText, classname){
 	return '<img src=\"' + src + '\" \" width=\"'+ width + '\" height=\"' + height + '\" alt=\"' + altText + '\" class=\"' + classname + '\">';
 };
 
-slayTrolls();
+$("form.commentContainer").each(function(){
+	var trollHeaderText = "<p class='trollHeader' style='display: none;'>(Trollet \'" + getNameFromForm($(this)) + "\' är infångat av Troll Hunter)</p>";
+	
+	$(this).find("div.divCommentsContentHeaderTop").append(trollHeaderText);
+	$(this).find("div.divCommentsContentHeader").append(trollHeaderText);
+});
 
 $("div.divCommentsFooter p.right").append(getImg(user_delete_icon, '16', '16', 'Slay troll', 'slayToll'));
+$("div.divCommentsContentHeaderTop p.right span").append(getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll'));
+$("div.divCommentsContentHeader p.right span").append(getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll'));
+$("img.resurrectTroll").hide();
+$("div.divCommentsContentHeaderTop p.left").addClass("originalHeader");
+$("div.divCommentsContentHeader p.left").addClass("originalHeader");
 
 $("img.slayToll").live("click", function(){
 	tagAsTroll($(this).parents("div.divCommentsFooter").find("span.commentAuthor").text());
-	slayTroll($(this).parents("form.commentContainer"));
+	$(this).parents("form").effect("shake", {}, 200, slayTrolls());
 })
 
 $("img.resurrectTroll").live("click", function(){
 	unTagAsTroll($(this).parents("form.commentContainer").find("span.commentAuthor").text());
 	resurrectTroll($(this).parents("form.commentContainer"));
 })
+
+slayTrolls();

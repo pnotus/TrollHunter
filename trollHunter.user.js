@@ -59,33 +59,26 @@ function toggleTroll(form) {
 	$(form).find("div.divCommentsFooter").slideToggle();
 }
 
-function resurrectTroll(form) {
-	toggleTroll(form, "slideDown");}
-
-function resurrectNamedTroll(name) {
+function resurrectTroll(name) {
     $("form.commentContainer").each(function(){
         if (name == getNameFromForm($(this))) {
-			resurrectTroll($(this));
+			toggleTroll($(this));
         }
     });
-}
-
-function slayTroll(form) {
-	toggleTroll(form, "hide");
 }
 
 function slayTrolls(){
     $("form.commentContainer").each(function(){
         if (commenterIsTroll(getNameFromForm($(this)))) {
-			slayTroll($(this));
+			toggleTroll($(this));
         }
     });
 }
 
-function slayNamedTroll(name) {
+function slayTroll(name) {
     $("form.commentContainer").each(function(){
         if (name == getNameFromForm($(this))) {
-			slayTroll($(this));
+			toggleTroll($(this));
         }
     });
 }
@@ -153,12 +146,12 @@ $("form.commentContainer").each(function(){
 
 $("img.slayToll").live("click", function(){
 	tagAsTroll($(this).parents("div.divCommentsFooter").find("span.commentAuthor").text());
-	$(this).parents("form").find("div").effect("highlight", {}, 1500, slayNamedTroll(getNameFromForm($(this).parents("form.commentContainer"))));
+	$(this).parents("form").find("div").effect("highlight", {}, 1500, slayTroll(getNameFromForm($(this).parents("form.commentContainer"))));
 })
 
 $("img.resurrectTroll").live("click", function(){
 	unTagAsTroll($(this).parents("form.commentContainer").find("span.commentAuthor").text());
-	resurrectNamedTroll(getNameFromForm($(this).parents("form.commentContainer")));
+	resurrectTroll(getNameFromForm($(this).parents("form.commentContainer")));
 })
 
 slayTrolls();

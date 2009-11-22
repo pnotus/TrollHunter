@@ -51,7 +51,6 @@ var user_add_icon =
 function toggleTroll(form) {
 	$(form).find(".originalHeader").toggle();
 	$(form).find(".trollHeader").toggle();
-	$(form).find(".trollHeader").toggleClass("left");
 	
 	$(form).find("img.resurrectTroll").toggle();
 	$(form).find("img.slayToll").toggle();
@@ -136,20 +135,21 @@ function getImg(src, width, height, altText, classname){
 	return '<img src=\"' + src + '\" \" width=\"'+ width + '\" height=\"' + height + '\" alt=\"' + altText + '\" class=\"' + classname + '\">';
 };
 
+var slayTrollImage = getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll');
+$("div.divCommentsContentHeaderTop p.right span").append(slayTrollImage);
+$("div.divCommentsContentHeader p.right span").append(slayTrollImage);
+$("div.divCommentsFooter p.right").append(getImg(user_delete_icon, '16', '16', 'Slay troll', 'slayToll'));
+$("img.resurrectTroll").hide();
+
+$("div.divCommentsContentHeaderTop p.left").addClass("originalHeader");
+$("div.divCommentsContentHeader p.left").addClass("originalHeader");
+
 $("form.commentContainer").each(function(){
-	var trollHeaderText = "<p class='trollHeader' style='display: none;'>(Trollet \'" + getNameFromForm($(this)) + "\' är infångat av Troll Hunter)</p>";
+	var trollHeaderText = "<p class='trollHeader left' style='display: none;'>(Trollet \'" + getNameFromForm($(this)) + "\' är infångat av Troll Hunter)</p>";
 	
 	$(this).find("div.divCommentsContentHeaderTop").append(trollHeaderText);
 	$(this).find("div.divCommentsContentHeader").append(trollHeaderText);
 });
-
-$("div.divCommentsFooter p.right").append(getImg(user_delete_icon, '16', '16', 'Slay troll', 'slayToll'));
-var slayTrollImage = getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll');
-$("div.divCommentsContentHeaderTop p.right span").append(slayTrollImage);
-$("div.divCommentsContentHeader p.right span").append(slayTrollImage);
-$("img.resurrectTroll").hide();
-$("div.divCommentsContentHeaderTop p.left").addClass("originalHeader");
-$("div.divCommentsContentHeader p.left").addClass("originalHeader");
 
 $("img.slayToll").live("click", function(){
 	tagAsTroll($(this).parents("div.divCommentsFooter").find("span.commentAuthor").text());

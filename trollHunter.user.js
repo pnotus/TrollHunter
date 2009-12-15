@@ -124,7 +124,7 @@ function getNameFromForm(form){
 }
 
 function getImg(src, width, height, altText, classname){
-	return '<img src=\"' + src + '\" \" width=\"'+ width + '\" height=\"' + height + '\" alt=\"' + altText + '\" class=\"' + classname + '\">';
+	return '<img src=\"' + src + '\" \" width=\"'+ width + '\" height=\"' + height + '\" alt=\"' + altText + '\" class=\"' + classname + '\" style=\"cursor: pointer;\"  />';
 };
 
 var slayTrollImage = getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll');

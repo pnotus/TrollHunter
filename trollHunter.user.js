@@ -127,30 +127,32 @@ function getImg(src, width, height, altText, classname){
 	return '<img src=\"' + src + '\" \" width=\"'+ width + '\" height=\"' + height + '\" alt=\"' + altText + '\" class=\"' + classname + '\" style=\"cursor: pointer;\"  />';
 };
 
-var slayTrollImage = getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll');
-$("div.divCommentsContentHeaderTop p.right span").append(slayTrollImage);
-$("div.divCommentsContentHeader p.right span").append(slayTrollImage);
-$("div.divCommentsFooter p.right").append(getImg(user_delete_icon, '16', '16', 'Slay troll', 'slayToll'));
-$("img.resurrectTroll").hide();
-
-$("div.divCommentsContentHeaderTop p.left").addClass("originalHeader");
-$("div.divCommentsContentHeader p.left").addClass("originalHeader");
-
-$("form.commentContainer").each(function(){
-	var trollHeaderText = "<p class='trollHeader left' style='display: none;'>(Trollet \'" + getNameFromForm($(this)) + "\' är infångat av Troll Hunter)</p>";
+$(document).ready(function() {
+	var slayTrollImage = getImg(user_add_icon, '16', '16', 'Resurrect troll', 'resurrectTroll');
+	$("div.divCommentsContentHeaderTop p.right span").append(slayTrollImage);
+	$("div.divCommentsContentHeader p.right span").append(slayTrollImage);
+	$("div.divCommentsFooter p.right").append(getImg(user_delete_icon, '16', '16', 'Slay troll', 'slayToll'));
+	$("img.resurrectTroll").hide();
 	
-	$(this).find("div.divCommentsContentHeaderTop").append(trollHeaderText);
-	$(this).find("div.divCommentsContentHeader").append(trollHeaderText);
+	$("div.divCommentsContentHeaderTop p.left").addClass("originalHeader");
+	$("div.divCommentsContentHeader p.left").addClass("originalHeader");
+	
+	$("form.commentContainer").each(function(){
+		var trollHeaderText = "<p class='trollHeader left' style='display: none;'>(Trollet \'" + getNameFromForm($(this)) + "\' är infångat av Troll Hunter)</p>";
+		
+		$(this).find("div.divCommentsContentHeaderTop").append(trollHeaderText);
+		$(this).find("div.divCommentsContentHeader").append(trollHeaderText);
+	});
+	
+	$("img.slayToll").live("click", function(){
+		tagAsTroll($(this).parents("div.divCommentsFooter").find("span.commentAuthor").text());
+		$(this).parents("form").find("div").effect("highlight", {}, 1500, slayTroll(getNameFromForm($(this).parents("form.commentContainer"))));
+	})
+	
+	$("img.resurrectTroll").live("click", function(){
+		unTagAsTroll($(this).parents("form.commentContainer").find("span.commentAuthor").text());
+		resurrectTroll(getNameFromForm($(this).parents("form.commentContainer")));
+	})
+	
+	slayTrolls();
 });
-
-$("img.slayToll").live("click", function(){
-	tagAsTroll($(this).parents("div.divCommentsFooter").find("span.commentAuthor").text());
-	$(this).parents("form").find("div").effect("highlight", {}, 1500, slayTroll(getNameFromForm($(this).parents("form.commentContainer"))));
-})
-
-$("img.resurrectTroll").live("click", function(){
-	unTagAsTroll($(this).parents("form.commentContainer").find("span.commentAuthor").text());
-	resurrectTroll(getNameFromForm($(this).parents("form.commentContainer")));
-})
-
-slayTrolls();

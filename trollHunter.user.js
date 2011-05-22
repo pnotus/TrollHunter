@@ -3,8 +3,8 @@
 // @description	        hunt down tolls on idg.se
 // @include				http://idg.se/*
 // @include				http://*.idg.se/*
-// @require				http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js
-// @require				http://ajax.googleapis.com/ajax/libs/jqueryui/1.7.2/jquery-ui.min.js
+// @require				http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js
+// @require				http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js
 // ==/UserScript==
 
 var trollId = "trolls";

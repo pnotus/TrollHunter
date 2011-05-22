@@ -1,1 +1,0 @@
-xcopy trollHunter.user.js C:\Users\Alice\AppData\Roaming\Mozilla\Firefox\Profiles\gsgiq8op.default\gm_scripts\troll_hunter\troll_hunter.user.js /Y

@@ -146,7 +146,8 @@ $(document).ready(function() {
 	
 	$("img.slayToll").live("click", function(){
 		tagAsTroll($(this).parents("div.divCommentsFooter").find("span.commentAuthor").text());
-		$(this).parents("form").find("div").effect("highlight", {}, 1500, slayTroll(getNameFromForm($(this).parents("form.commentContainer"))));
+        $(this).parents("form").find("div").effect("highlight", {}, 500);
+        slayTroll(getNameFromForm($(this).parents("form.commentContainer")));
 	})
 	
 	$("img.resurrectTroll").live("click", function(){
